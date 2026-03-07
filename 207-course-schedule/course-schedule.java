@@ -1,39 +1,42 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-      Map<Integer,List<Integer>> courseGraph = new HashMap();
-      for(int[] pre: prerequisites){
-        if(courseGraph.containsKey(pre[1])){
-            courseGraph.get(pre[1]).add(pre[0]);
-        }else{
-            List<Integer> nextCourses = new LinkedList();
-            nextCourses.add(pre[0]);
-            courseGraph.put(pre[1], nextCourses);
+      List<List<Integer>> graph = new ArrayList();
+
+      for(int i=0; i<numCourses;i++){
+        graph.add( new ArrayList());
+      }
+      int[] indegree = new int[numCourses];
+      for(int[] p : prerequisites){
+             int course =    p[0];
+             int prereq = p[1];
+
+             graph.get(prereq).add(course);
+             indegree[course]++; 
+      }
+
+      Queue<Integer> q = new LinkedList();
+
+      for(int i = 0 ; i<numCourses; i++){
+        if(indegree[i] == 0){
+            q.offer(i);
         }
       }
-      HashSet<Integer> visited = new HashSet();
-        
-      for(int currentCourse=0;currentCourse < numCourses; currentCourse++){
-        if(courseSchdule(currentCourse,visited, courseGraph) == false)
-         return false;
+      
+      int count = 0;
+      while(!q.isEmpty()){
+         int node =  q.poll(); 
+
+         count++;
+
+          for(int neigbhour : graph.get(node)){
+              indegree[neigbhour]--;
+
+              if(indegree[neigbhour] == 0){
+                q.offer(neigbhour);
+              }
+          }
       }
-      return true;
-    }
 
-    public boolean courseSchdule(int course, HashSet<Integer> visited, Map<Integer,List<Integer>> courseGraph){
-        if(visited.contains(course)){
-            return false;
-        }
-        if(courseGraph.get(course) == null){
-            return true;
-        }
-        visited.add(course);
-
-        for(int pre: courseGraph.get(course)){
-            if(courseSchdule(pre, visited, courseGraph) == false)
-             return false;
-        }
-        visited.remove(course);
-        courseGraph.put(course, null);
-        return true;
+      return count == numCourses;
     }
 }
