@@ -1,6 +1,7 @@
 class Solution {
     public int rob(int[] nums) {
 
+/*
        if(nums.length == 0) return 0;
        if(nums.length == 1) return nums[0];
 
@@ -14,5 +15,19 @@ class Solution {
        }
 
        return dp[nums.length-1];
+
+       */
+
+       int maxTillPreviousHouse = 0 ;
+       int maxTillTwoHouseBack = 0;
+
+       for(int i =0 ; i<nums.length;i++){
+        int currentmax = Math.max(maxTillPreviousHouse , maxTillTwoHouseBack+nums[i]);
+
+        maxTillTwoHouseBack = maxTillPreviousHouse;
+        maxTillPreviousHouse = currentmax;
+       }
+
+       return maxTillPreviousHouse;
     }
 }
