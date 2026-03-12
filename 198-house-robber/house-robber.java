@@ -21,8 +21,8 @@ class Solution {
        int maxTillPreviousHouse = 0 ;
        int maxTillTwoHouseBack = 0;
 
-       for(int i =0 ; i<nums.length;i++){
-        int currentmax = Math.max(maxTillPreviousHouse , maxTillTwoHouseBack+nums[i]);
+       for(int num : nums){
+        int currentmax = Math.max(maxTillPreviousHouse , maxTillTwoHouseBack+num);
 
         maxTillTwoHouseBack = maxTillPreviousHouse;
         maxTillPreviousHouse = currentmax;
